@@ -11,10 +11,17 @@ url = f"https://drive.google.com/uc?id={file_id}"
 
 file_path = "postings.csv"
 
-if not os.path.exists(file_path):
-    gdown.download(url, file_path, quiet=False)
+@st.cache_data
+def load_data():
+    if not os.path.exists(file_path):
+        gdown.download(url, file_path, quiet=False)
 
-df = pd.read_csv(file_path)
+    return pd.read_csv(file_path)
+
+df = load_data()
+
+st.write("Data loaded successfully!")
+st.dataframe(df.head())
 
 st.set_page_config(
     page_title="LinkedIn Job Market Intelligence",
